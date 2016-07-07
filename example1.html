@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Example 1</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+    <script   src="https://code.jquery.com/jquery-3.0.0.min.js"   integrity="sha256-JmvOoLtYsmqlsWxa7mDSLMwa6dZ9rrIdtrrVYRnDRH0="   crossorigin="anonymous"></script>
+    <script src="./example1.js"></script>
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-2"></div>
+            <div class="col-sm-8">
+                    <h1>Example 1</h1>
+                    <br />
+                    <p>GA's Doughnut API to demonstrate how to get data, and add new data.</p>
+                    <br />
+            </div>
+            <div class="col-sm-2"></div>
+         </div>
+       
+        <div class="row">
+            <div class="col-sm-2"></div>
+            <div class="col-sm-8">
+                <button id="refresh">REFRESH</button>
+                <br />
+                <br />
+
+                <form id="myForm">
+                    <label for="myInputId">Flavour</label>
+                    <input type="textfield" name="myInput" name="myInputId" id="flavour">
+                    
+                    <label for="myInput2Id">Style</label>
+                    <input type="text" name="myInput2" name="myInput2Id" id="style">
+                    
+                    <input type="submit" value="submit">
+                </form>    
+
+                <br />
+
+            </div>
+            <div class="col-sm-2"></div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-2"></div>
+            <div class="col-sm-8">
+                <ul id="main"></ul>
+            
+            </div>
+            <div class="col-sm-2"></div>
+        </div>
+    </div>
+</body>
+</html>
