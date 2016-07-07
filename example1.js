@@ -32,7 +32,7 @@ $("#myForm").on( "submit", function( event ) {
     data: data
   }).done(function(response){
       console.log(response)
-      $('#main').append('<li>' + response.myInput + ' - '  + response.myInput2 + ' <button>DELETE</button></li>')
+      $('#main').append('<li>' + response.myInput + ' - '  + response.myInput2 + ' </li>')
   }).fail(function(jqXHR, textStatus, errorThrown){
     console.log(errorThrown)
   });
