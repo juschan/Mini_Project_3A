@@ -1,0 +1,51 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Example 2</title>
+    <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/css/materialize.min.css">
+    <script   src="https://code.jquery.com/jquery-3.0.0.min.js"   integrity="sha256-JmvOoLtYsmqlsWxa7mDSLMwa6dZ9rrIdtrrVYRnDRH0="   crossorigin="anonymous"></script>
+
+    <script>
+    $(document).ready(function () {
+
+    $('#getText').click(function() {
+        var request = new XMLHttpRequest();
+        request.open('GET', './ajaxText.txt', true);
+        request.onload=function() {
+            var response = request.responseText;
+            $('#data').html(response);
+        }
+        request.onerror = function() {
+            $('#data').html("There is an error");
+        }
+        request.send();
+    });
+  });
+
+</script>
+</head>
+<body>
+    <div class="container">
+        <div class="section">
+           <div class="col-s2"></div>
+           <div class="col-s8">
+                   <h1>Example 2</h1>
+                   <p>Using Ajax to retrieve Text from a file.</p>
+                   <p>For this example to work, the webpage must be hosted on a web server. This should work on Github pages.</p>
+                   <p>If you have python installed locally, run: python -m http.server</p>
+           </div>
+           <div class="col-s2"></div>
+        </div>
+
+        <button id="getText">Get Text</button>
+        <br />
+        <div class="divider"></div>
+        <br />
+        <div id="data" class="divStyle"></div>
+       
+    </div>
+</body>
+</html>
