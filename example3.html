@@ -1,0 +1,114 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Example 3</title>
+    <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">-->
+    <!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/css/materialize.min.css">-->
+    <script   src="https://code.jquery.com/jquery-3.0.0.min.js"   integrity="sha256-JmvOoLtYsmqlsWxa7mDSLMwa6dZ9rrIdtrrVYRnDRH0="   crossorigin="anonymous"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/flot/0.7/jquery.flot.min.js"></script>
+    <script>
+    $(document).ready(function () {
+    
+      $.ajaxSetup({
+          beforeSend: function(xhr, settings) {
+          var prefix=settings.url.match(/prefix=(.*?)&/);
+          if ( prefix.length > 1) {
+              var callback = prefix[1];
+              if (callback !== callback.toLowerCase()) {
+                  window[callback.toLowerCase()] = new Function("response", callback + "(response)");
+              }
+          }
+        }
+      })  
+
+      deferredRegionsRequest= $.getJSON(
+          "http://api.worldbank.org/regions/?prefix=?",
+          {format: "jsonp"}
+      );
+
+      var deferredRegionsAvailable = $.Deferred()
+
+      deferredRegionsRequest.done(function(response) {
+          deferredRegionsAvailable.resolve(
+            $.map(
+                $.grep(response[1], function(regionObj) {
+                    return (regionObj.id != "")
+                }),
+                function(regionObj) {
+                    return {
+                        code: regionObj.code,
+                        name: regionObj.name.replace(" (all income levels)" , "")
+                    };
+                }
+          )
+        );
+      });
+
+      var deferredAllDataAvailable=$.Deferred();
+
+     deferredRegionsAvailable.done(function(regions) {
+         $.each(regions,function(idx, regionObj) {
+             regionObj.deferredDataRequest = $.getJSON(
+                    "http://api.worldbank.org/countries/"
+                       + regionObj.code
+                       + "/indicators/NY.GDP.MKTP.CD"
+                       + "?prefix=?"
+                    ,{ format: "jsonp", per_page: 9999 }
+             );
+             regionObj.deferredDataAvailable = $.Deferred();
+             regionObj.deferredDataRequest.done(function(response){
+                 regionObj.rawData = response[1] || [];
+                 regionObj.deferredDataAvailable.resolve();
+             });
+        });
+        $.when.apply(this,$.map(regions, function(regionObj) {
+         return regionObj.deferredDataAvailable
+        })).done(function() {
+          deferredAllDataAvailable.resolve(regions);
+         });
+      });
+  
+    var deferredChartDataReady = $.Deferred();
+
+      deferredAllDataAvailable.done(function(regions) {
+          $.each(regions,function(idx, regionObj) {
+              regionObj.flotData = $.map(
+                  $.grep(regionObj.rawData, function(dataObj) {
+                      return (dataObj.value!==null);
+                  }),
+                  function(dataObj) {
+                      return [[parseInt(dataObj.date),
+                      parseFloat(dataObj.value)/1e12]];
+                  }
+              )
+          })
+          deferredChartDataReady.resolve(regions);
+      })
+
+      deferredChartDataReady.done(function(regions) {
+          $.plot($("#chart"),
+            $.map(regions, function(regionObj) {
+                return {
+                    label: regionObj.name,
+                    data: regionObj.flotData
+                }
+            }), {legend: {position: "nw"}}
+          )
+      });
+
+    });
+
+</script>
+</head>
+<body>
+    <div style="margin:auto;">
+    <h1>Example 3</h1>
+    <p>Using Ajax to retrieve World Bank data with Visualisation.</p>
+    <p>Derived from: Data Viaualization with Javascript, Stephen Thomas, 2015, No Starch Press</p>
+     <div id="chart" style="width:600px; height:400px;"></div>
+    </div>
+</body>
+</html>
