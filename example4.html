@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Example 4</title>
+    <script src="http://cdn.jsdelivr.net/jquery/2.1.3/jquery.min.js"></script>
+    <script src="http://cdn.jsdelivr.net/algoliasearch/3/algoliasearch.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/css/materialize.min.css">
+   
+    <script>
+
+    $(document).ready(function() {
+      var client = algoliasearch('WKDTL1UBEY', '43e9aa33004f1d6800bc160e9144a9df');
+      var index = client.initIndex('stash');
+
+     //create eventlistener for search
+     $('#search_input').click( function() {
+       index.search($('input').val(), function searchDone(err, content) {
+          let hit_count = content.hits.length
+          $('#stashes').text('')
+          for(var i=0; i< hit_count; i++) {
+            $('#stashes').append('<li><a href="' + content.hits[i].url + '">' + content.hits[i].title + '</a></li>')   
+          }         
+       });
+     })
+    })
+
+</script>
+</head>
+<body>
+    <div class="container">
+        <div class="section">
+           <div class="col-s2"></div>
+           <div class="col-s8">
+                   <h1>Example 4</h1>
+                   <p>Using Algoria search feature to retrieve Stash data</p>
+                   <p>stash.json - data file obtained from Stash Project, /allresources route.</p>
+                   <p>Data issues: Object keys lack quotes; Double quotes within text strings;</p>
+           </div>
+           <div class="col-s2"></div>
+        </div>
+
+        <input type="text"><button id="search_input">Submit</button>
+        <br />
+        <br />
+        <div class="divider"></div>
+        <br />
+        <div class="results">
+          <h4>Search Results from Stash data</h4>
+          <ul id="stashes"></ul>
+        </div>
+        
+       
+    </div>
+</body>
+</html>
+
+
+
+
+
+
+
