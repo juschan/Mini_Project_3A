@@ -3,7 +3,7 @@ $(document).ready(function () {
 console.clear()
 
 function reload() {
-  $.get('http://api.doughnuts.ga/doughnuts')
+  $.get('https://api.doughnuts.ga/doughnuts')
     .done(function(data){
       console.log("Received the data")
       $('#main').html('')
@@ -28,7 +28,7 @@ $("#myForm").on( "submit", function( event ) {
   
   $.ajax({
     type: "POST",
-    url: 'http://api.doughnuts.ga/doughnuts',
+    url: 'https://api.doughnuts.ga/doughnuts',
     data: data
   }).done(function(response){
       console.log(response)
